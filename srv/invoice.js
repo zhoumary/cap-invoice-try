@@ -37,12 +37,14 @@ module.exports = (srv) => {
 
 
     srv.on("COMMIT", InvoiceTable, ctx => {
+        // judge whether is creating invoice
         if (creating == true) {
             currKey = ctx.data.InvoiceNo;
         }
     })
 
     srv.after("COMMIT", InvoiceTable, async () => {
+        // judge whether is creating invoice
         if (creating == true) {
             const currInvoice = await invoices(currKey).catch(err => { throw new Error(err); });
             if (currInvoice < 1) {
